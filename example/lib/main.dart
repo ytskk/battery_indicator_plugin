@@ -30,7 +30,9 @@ class _MyAppState extends State<MyApp> {
     int batteryLevel;
     try {
       batteryLevel = await _batteryIndicatorPlugin.getBatteryInfo() ?? -1;
+      print('batteryLevel: $batteryLevel');
     } on PlatformException catch (e) {
+      print('error: ${e}');
       batteryLevel = -1;
     }
 
@@ -43,11 +45,22 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    print(_batteryLevel);
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
+
+        /// Returns a future that resolves to the battery level.
+        // body: Center(
+        //   child: _BatteryIndicator(
+        //     batteryLevel: _batteryLevel,
+        //   ),
+        // ),
+
+        /// Returns a stream of battery level updates.
         body: StreamBuilder<int?>(
           stream: _batteryIndicatorPlugin.getBatteryInfoStream(),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
